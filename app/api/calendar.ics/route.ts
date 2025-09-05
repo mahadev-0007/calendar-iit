@@ -71,7 +71,7 @@ async function processCalendar(config: CalendarConfig) {
         
         if (config.zoomReminder) {
           calendarEvent.createAlarm({
-            type: 'display',
+            type: 'display' as any,
             trigger: config.zoomReminderMinutes * 60, // seconds before
             description: 'Reminder: Zoom meeting starting soon',
           });
@@ -83,7 +83,7 @@ async function processCalendar(config: CalendarConfig) {
         
         if (config.otherReminder) {
           calendarEvent.createAlarm({
-            type: 'display',
+            type: 'display' as any,
             trigger: config.otherReminderMinutes * 60, // seconds before
             description: 'Reminder: Event starting soon',
           });
