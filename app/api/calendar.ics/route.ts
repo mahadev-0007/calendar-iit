@@ -7,6 +7,7 @@ interface CalendarConfig {
   zoomPriority: number;
   zoomReminder: boolean;
   zoomReminderMinutes: number;
+  includeOtherEvents: boolean;
   otherPriority: number;
   otherReminder: boolean;
   otherReminderMinutes: number;
@@ -16,6 +17,7 @@ const defaultConfig: CalendarConfig = {
   zoomPriority: 1,
   zoomReminder: true,
   zoomReminderMinutes: 15,
+  includeOtherEvents: true,
   otherPriority: 5,
   otherReminder: false,
   otherReminderMinutes: 10,
@@ -78,7 +80,7 @@ async function processCalendar(config: CalendarConfig) {
         }
         
         zoomEventsCount++;
-      } else {
+      } else if (config.includeOtherEvents) {
         calendarEvent.priority(config.otherPriority);
         
         if (config.otherReminder) {
@@ -90,10 +92,13 @@ async function processCalendar(config: CalendarConfig) {
         }
         
         otherEventsCount++;
+      } else {
+        // Skip this event - don't add it to the calendar
+        return;
       }
     });
 
-    console.log(`📊 Processed ${zoomEventsCount} Zoom events and ${otherEventsCount} other events`);
+    console.log(`📊 Processed ${zoomEventsCount} Zoom events${config.includeOtherEvents ? ` and ${otherEventsCount} other events` : ' (other events excluded)'}`);
     return calendar.toString();
     
   } catch (error) {
@@ -184,6 +189,7 @@ export async function GET(request: NextRequest) {
       zoomPriority: parseInt(searchParams.get('zoom_priority') || defaultConfig.zoomPriority.toString()),
       zoomReminder: searchParams.get('zoom_reminder') === 'true',
       zoomReminderMinutes: parseInt(searchParams.get('zoom_reminder_minutes') || defaultConfig.zoomReminderMinutes.toString()),
+      includeOtherEvents: searchParams.get('include_other_events') !== 'false', // default to true
       otherPriority: parseInt(searchParams.get('other_priority') || defaultConfig.otherPriority.toString()),
       otherReminder: searchParams.get('other_reminder') === 'true',
       otherReminderMinutes: parseInt(searchParams.get('other_reminder_minutes') || defaultConfig.otherReminderMinutes.toString()),

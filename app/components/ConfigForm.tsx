@@ -89,55 +89,74 @@ export default function ConfigForm({ config, onSubmit }: ConfigFormProps) {
 
       {/* Other Events Section */}
       <div className="bg-blue-50 p-6 rounded-lg border border-blue-200">
-        <h3 className="text-xl font-semibold text-blue-800 mb-4 flex items-center">
-          🔵 Other Events Settings
-        </h3>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Priority Level
-            </label>
-            <select
-              value={formData.otherPriority}
-              onChange={(e) => handleInputChange('otherPriority', parseInt(e.target.value))}
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              {priorityOptions.map(option => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-2">
-              <input
-                type="checkbox"
-                checked={formData.otherReminder}
-                onChange={(e) => handleInputChange('otherReminder', e.target.checked)}
-                className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-              />
-              <span>Enable Reminders</span>
-            </label>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Reminder Time (minutes before)
-            </label>
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-xl font-semibold text-blue-800 flex items-center">
+            🔵 Other Events Settings
+          </h3>
+          <label className="flex items-center space-x-2 text-sm font-medium text-blue-800">
             <input
-              type="number"
-              min="1"
-              max="1440"
-              value={formData.otherReminderMinutes}
-              onChange={(e) => handleInputChange('otherReminderMinutes', parseInt(e.target.value))}
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              disabled={!formData.otherReminder}
+              type="checkbox"
+              checked={formData.includeOtherEvents}
+              onChange={(e) => handleInputChange('includeOtherEvents', e.target.checked)}
+              className="rounded border-blue-300 text-blue-600 focus:ring-blue-500"
             />
-          </div>
+            <span>Include Other Events</span>
+          </label>
         </div>
+        
+        {formData.includeOtherEvents ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Priority Level
+              </label>
+              <select
+                value={formData.otherPriority}
+                onChange={(e) => handleInputChange('otherPriority', parseInt(e.target.value))}
+                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                {priorityOptions.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="flex items-center space-x-2 text-sm font-medium text-gray-700 mb-2">
+                <input
+                  type="checkbox"
+                  checked={formData.otherReminder}
+                  onChange={(e) => handleInputChange('otherReminder', e.target.checked)}
+                  className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <span>Enable Reminders</span>
+              </label>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Reminder Time (minutes before)
+              </label>
+              <input
+                type="number"
+                min="1"
+                max="1440"
+                value={formData.otherReminderMinutes}
+                onChange={(e) => handleInputChange('otherReminderMinutes', parseInt(e.target.value))}
+                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                disabled={!formData.otherReminder}
+              />
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-8">
+            <p className="text-gray-500 text-sm">
+              Other events will be excluded from the calendar. Only Zoom meetings will be included.
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="text-center">

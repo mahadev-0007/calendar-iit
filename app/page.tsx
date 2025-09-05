@@ -8,6 +8,7 @@ export interface CalendarConfig {
   zoomPriority: number;
   zoomReminder: boolean;
   zoomReminderMinutes: number;
+  includeOtherEvents: boolean;
   otherPriority: number;
   otherReminder: boolean;
   otherReminderMinutes: number;
@@ -17,6 +18,7 @@ const defaultConfig: CalendarConfig = {
   zoomPriority: 1,
   zoomReminder: true,
   zoomReminderMinutes: 15,
+  includeOtherEvents: true,
   otherPriority: 5,
   otherReminder: false,
   otherReminderMinutes: 10,
@@ -35,6 +37,7 @@ export default function Home() {
       zoom_priority: newConfig.zoomPriority.toString(),
       zoom_reminder: newConfig.zoomReminder.toString(),
       zoom_reminder_minutes: newConfig.zoomReminderMinutes.toString(),
+      include_other_events: newConfig.includeOtherEvents.toString(),
       other_priority: newConfig.otherPriority.toString(),
       other_reminder: newConfig.otherReminder.toString(),
       other_reminder_minutes: newConfig.otherReminderMinutes.toString(),
