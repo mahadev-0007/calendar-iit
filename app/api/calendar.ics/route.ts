@@ -170,7 +170,17 @@ function parseICSDate(dateString: string): Date {
     const minute = parseInt(cleanDate.substring(10, 12)) || 0;
     const second = parseInt(cleanDate.substring(12, 14)) || 0;
     
-    return new Date(year, month, day, hour, minute, second);
+    // The source calendar incorrectly marks IST times as UTC (with 'Z')
+    // We need to treat these times as IST (UTC+5:30) regardless of the 'Z' suffix
+    if (dateString.includes('Z')) {
+      // Create a date object treating the time as IST
+      // Since JavaScript Date constructor uses local timezone, we create it directly
+      const istDate = new Date(year, month, day, hour, minute, second);
+      return istDate;
+    } else {
+      // No timezone indicator, treat as local time
+      return new Date(year, month, day, hour, minute, second);
+    }
   } else {
     // Date only format: 20231201
     const year = parseInt(dateString.substring(0, 4));
