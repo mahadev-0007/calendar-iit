@@ -70,11 +70,11 @@ async function processCalendar(config: CalendarConfig) {
         calendarEvent.priority(config.zoomPriority);
         
         if (config.zoomReminder) {
-          calendarEvent.createAlarm({
+          const alarm = calendarEvent.createAlarm({
             type: 'display' as any,
-            trigger: config.zoomReminderMinutes * 60, // seconds before
-            description: 'Reminder: Zoom meeting starting soon',
+            trigger: -config.zoomReminderMinutes * 60, // negative seconds before (relative to start)
           });
+          alarm.description('Reminder: Zoom meeting starting soon');
         }
         
         zoomEventsCount++;
@@ -82,11 +82,11 @@ async function processCalendar(config: CalendarConfig) {
         calendarEvent.priority(config.otherPriority);
         
         if (config.otherReminder) {
-          calendarEvent.createAlarm({
+          const alarm = calendarEvent.createAlarm({
             type: 'display' as any,
-            trigger: config.otherReminderMinutes * 60, // seconds before
-            description: 'Reminder: Event starting soon',
+            trigger: -config.otherReminderMinutes * 60, // negative seconds before (relative to start)
           });
+          alarm.description('Reminder: Event starting soon');
         }
         
         otherEventsCount++;
